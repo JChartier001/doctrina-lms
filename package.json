@@ -19,8 +19,7 @@
 		"test:coverage": "vitest run --coverage",
 		"test:ci": "vitest run --coverage",
 		"test:ui": "vitest --ui",
-		"verify": "bun formatting:fix && bun lint:fix && bun typescript && bun test:coverage",
-		"update:droidz": "curl -fsSL https://raw.githubusercontent.com/korallis/Droidz/main/install.sh | bash"
+		"verify": "yarn formatting:fix && yarn lint:fix && yarn typescript && yarn test:coverage"
 	},
 	"dependencies": {
 		"@clerk/backend": "^2.25.0",
