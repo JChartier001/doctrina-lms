@@ -18,6 +18,7 @@ The course wizard includes an AI quiz generator component (`components/course-wi
 ### Solution Summary
 
 Implement a complete quiz system that:
+
 1. Allows instructors to create quizzes with multiple-choice questions
 2. Enables students to take quizzes and submit answers
 3. Auto-grades submissions and provides instant feedback with explanations
@@ -34,20 +35,21 @@ Implement a complete quiz system that:
 
 ```typescript
 quizzes: defineTable({
-  courseId: v.id('courses'),
-  moduleId: v.optional(v.id('courseModules')),  // Optional: quiz at module level
-  title: v.string(),
-  passingScore: v.number(),                      // Default: 80%
-  maxAttempts: v.number(),                       // Default: 3 (Story 102.3)
-  deleted: v.boolean(),                          // Soft delete (Story 102.3)
-  deletedAt: v.optional(v.number()),            // Soft delete timestamp
-  createdAt: v.number(),
+	courseId: v.id('courses'),
+	moduleId: v.optional(v.id('courseModules')), // Optional: quiz at module level
+	title: v.string(),
+	passingScore: v.number(), // Default: 80%
+	maxAttempts: v.number(), // Default: 3 (Story 102.3)
+	deleted: v.boolean(), // Soft delete (Story 102.3)
+	deletedAt: v.optional(v.number()), // Soft delete timestamp
+	createdAt: v.number(),
 })
-  .index('by_course', ['courseId'])
-  .index('by_module', ['moduleId'])
+	.index('by_course', ['courseId'])
+	.index('by_module', ['moduleId']);
 ```
 
 **Design Decisions**:
+
 - **moduleId optional**: Quiz can belong to module OR course
 - **Soft delete**: Preserve quiz data when deleted (student attempts remain accessible)
 - **maxAttempts**: Limit retakes (prevents answer fishing)
@@ -57,17 +59,17 @@ quizzes: defineTable({
 
 ```typescript
 quizQuestions: defineTable({
-  quizId: v.id('quizzes'),
-  question: v.string(),
-  options: v.array(v.string()),                 // e.g., ["Option A", "Option B", ...]
-  correctAnswer: v.number(),                    // Index of correct option (0-based)
-  explanation: v.optional(v.string()),          // Why this is correct (Story 102.3)
-  order: v.number(),                            // Display order
-})
-  .index('by_quiz', ['quizId'])
+	quizId: v.id('quizzes'),
+	question: v.string(),
+	options: v.array(v.string()), // e.g., ["Option A", "Option B", ...]
+	correctAnswer: v.number(), // Index of correct option (0-based)
+	explanation: v.optional(v.string()), // Why this is correct (Story 102.3)
+	order: v.number(), // Display order
+}).index('by_quiz', ['quizId']);
 ```
 
 **Design Decisions**:
+
 - **Multiple choice only**: MVP supports only multiple choice (no essay, no fill-in-blank)
 - **options array**: Flexible number of choices (2-6 typical)
 - **correctAnswer as index**: Simple integer validation
@@ -77,18 +79,19 @@ quizQuestions: defineTable({
 
 ```typescript
 quizAttempts: defineTable({
-  userId: v.string(),                           // Clerk user ID
-  quizId: v.id('quizzes'),
-  answers: v.array(v.number()),                 // Array of selected option indices
-  score: v.number(),                            // Percentage (0-100)
-  passed: v.boolean(),                          // score >= passingScore
-  submittedAt: v.number(),                      // Unix timestamp (ms)
+	userId: v.string(), // Clerk user ID
+	quizId: v.id('quizzes'),
+	answers: v.array(v.number()), // Array of selected option indices
+	score: v.number(), // Percentage (0-100)
+	passed: v.boolean(), // score >= passingScore
+	submittedAt: v.number(), // Unix timestamp (ms)
 })
-  .index('by_user_quiz', ['userId', 'quizId'])  // Get user attempts for quiz
-  .index('by_user', ['userId'])                 // Get all user attempts
+	.index('by_user_quiz', ['userId', 'quizId']) // Get user attempts for quiz
+	.index('by_user', ['userId']); // Get all user attempts
 ```
 
 **Design Decisions**:
+
 - **Store answers array**: Enables review of incorrect answers
 - **Passed boolean**: Denormalized for quick filtering
 - **No "in-progress"**: Quiz must be submitted atomically (no partial saves in MVP)
@@ -106,28 +109,29 @@ quizAttempts: defineTable({
 **Authorization**: Instructor must own the course
 
 **Pattern**:
+
 ```typescript
 export const create = mutation({
-  args: {
-    courseId: v.id('courses'),
-    moduleId: v.optional(v.id('courseModules')),
-    title: v.string(),
-    passingScore: v.number(),  // Default: 80
-  },
-  handler: async (ctx, args) => {
-    // Verify instructor owns course
-    const identity = await ctx.auth.getUserIdentity();
-    const course = await ctx.db.get(args.courseId);
+	args: {
+		courseId: v.id('courses'),
+		moduleId: v.optional(v.id('courseModules')),
+		title: v.string(),
+		passingScore: v.number(), // Default: 80
+	},
+	handler: async (ctx, args) => {
+		// Verify instructor owns course
+		const identity = await ctx.auth.getUserIdentity();
+		const course = await ctx.db.get(args.courseId);
 
-    if (course.instructorId !== identity?.subject) {
-      throw new Error('Not authorized');
-    }
+		if (course.instructorId !== identity?.subject) {
+			throw new Error('Not authorized');
+		}
 
-    return await ctx.db.insert('quizzes', {
-      ...args,
-      createdAt: Date.now(),
-    });
-  },
+		return await ctx.db.insert('quizzes', {
+			...args,
+			createdAt: Date.now(),
+		});
+	},
 });
 ```
 
@@ -138,42 +142,43 @@ export const create = mutation({
 **Authorization**: Instructor must own the course
 
 **Pattern**:
+
 ```typescript
 export const addQuestions = mutation({
-  args: {
-    quizId: v.id('quizzes'),
-    questions: v.array(
-      v.object({
-        question: v.string(),
-        options: v.array(v.string()),
-        correctAnswer: v.number(),
-        explanation: v.optional(v.string()),
-      }),
-    ),
-  },
-  handler: async (ctx, { quizId, questions }) => {
-    // Verify ownership
-    const quiz = await ctx.db.get(quizId);
-    const course = await ctx.db.get(quiz.courseId);
-    const identity = await ctx.auth.getUserIdentity();
+	args: {
+		quizId: v.id('quizzes'),
+		questions: v.array(
+			v.object({
+				question: v.string(),
+				options: v.array(v.string()),
+				correctAnswer: v.number(),
+				explanation: v.optional(v.string()),
+			}),
+		),
+	},
+	handler: async (ctx, { quizId, questions }) => {
+		// Verify ownership
+		const quiz = await ctx.db.get(quizId);
+		const course = await ctx.db.get(quiz.courseId);
+		const identity = await ctx.auth.getUserIdentity();
 
-    if (course.instructorId !== identity?.subject) {
-      throw new Error('Not authorized');
-    }
+		if (course.instructorId !== identity?.subject) {
+			throw new Error('Not authorized');
+		}
 
-    // Insert all questions
-    const questionIds = [];
-    for (let i = 0; i < questions.length; i++) {
-      const id = await ctx.db.insert('quizQuestions', {
-        quizId,
-        ...questions[i],
-        order: i,
-      });
-      questionIds.push(id);
-    }
+		// Insert all questions
+		const questionIds = [];
+		for (let i = 0; i < questions.length; i++) {
+			const id = await ctx.db.insert('quizQuestions', {
+				quizId,
+				...questions[i],
+				order: i,
+			});
+			questionIds.push(id);
+		}
 
-    return questionIds;
-  },
+		return questionIds;
+	},
 });
 ```
 
@@ -184,30 +189,31 @@ export const addQuestions = mutation({
 **Security**: Does NOT return correctAnswer to students (only to instructors)
 
 **Pattern**:
+
 ```typescript
 export const getQuiz = query({
-  args: { quizId: v.id('quizzes') },
-  handler: async (ctx, { quizId }) => {
-    const quiz = await ctx.db.get(quizId);
-    if (!quiz) return null;
+	args: { quizId: v.id('quizzes') },
+	handler: async (ctx, { quizId }) => {
+		const quiz = await ctx.db.get(quizId);
+		if (!quiz) return null;
 
-    const questions = await ctx.db
-      .query('quizQuestions')
-      .withIndex('by_quiz', q => q.eq('quizId', quizId))
-      .collect();
+		const questions = await ctx.db
+			.query('quizQuestions')
+			.withIndex('by_quiz', q => q.eq('quizId', quizId))
+			.collect();
 
-    return {
-      ...quiz,
-      questions: questions
-        .sort((a, b) => a.order - b.order)
-        .map(q => ({
-          id: q._id,
-          question: q.question,
-          options: q.options,
-          // correctAnswer NOT included (security)
-        })),
-    };
-  },
+		return {
+			...quiz,
+			questions: questions
+				.sort((a, b) => a.order - b.order)
+				.map(q => ({
+					id: q._id,
+					question: q.question,
+					options: q.options,
+					// correctAnswer NOT included (security)
+				})),
+		};
+	},
 });
 ```
 
@@ -220,6 +226,7 @@ export const getQuiz = query({
 **Purpose**: Submit quiz answers and receive instant grading
 
 **Flow**:
+
 ```
 1. Verify user authentication
 2. Get quiz and questions
@@ -232,77 +239,76 @@ export const getQuiz = query({
 ```
 
 **Pattern**:
+
 ```typescript
 export const submit = mutation({
-  args: {
-    quizId: v.id('quizzes'),
-    answers: v.array(v.number()),  // Array of selected option indices
-  },
-  handler: async (ctx, { quizId, answers }) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) throw new Error('Unauthorized');
+	args: {
+		quizId: v.id('quizzes'),
+		answers: v.array(v.number()), // Array of selected option indices
+	},
+	handler: async (ctx, { quizId, answers }) => {
+		const identity = await ctx.auth.getUserIdentity();
+		if (!identity) throw new Error('Unauthorized');
 
-    const quiz = await ctx.db.get(quizId);
+		const quiz = await ctx.db.get(quizId);
 
-    // Check maxAttempts (if field exists)
-    const attempts = await ctx.db
-      .query('quizAttempts')
-      .withIndex('by_user_quiz', q =>
-        q.eq('userId', identity.subject).eq('quizId', quizId)
-      )
-      .collect();
+		// Check maxAttempts (if field exists)
+		const attempts = await ctx.db
+			.query('quizAttempts')
+			.withIndex('by_user_quiz', q => q.eq('userId', identity.subject).eq('quizId', quizId))
+			.collect();
 
-    if (quiz.maxAttempts && attempts.length >= quiz.maxAttempts) {
-      throw new Error(`Maximum attempts (${quiz.maxAttempts}) reached`);
-    }
+		if (quiz.maxAttempts && attempts.length >= quiz.maxAttempts) {
+			throw new Error(`Maximum attempts (${quiz.maxAttempts}) reached`);
+		}
 
-    const questions = await ctx.db
-      .query('quizQuestions')
-      .withIndex('by_quiz', q => q.eq('quizId', quizId))
-      .collect();
+		const questions = await ctx.db
+			.query('quizQuestions')
+			.withIndex('by_quiz', q => q.eq('quizId', quizId))
+			.collect();
 
-    const sortedQuestions = questions.sort((a, b) => a.order - b.order);
+		const sortedQuestions = questions.sort((a, b) => a.order - b.order);
 
-    // Grade quiz
-    let correctCount = 0;
-    const results = sortedQuestions.map((q, i) => {
-      const isCorrect = q.correctAnswer === answers[i];
-      if (isCorrect) correctCount++;
+		// Grade quiz
+		let correctCount = 0;
+		const results = sortedQuestions.map((q, i) => {
+			const isCorrect = q.correctAnswer === answers[i];
+			if (isCorrect) correctCount++;
 
-      return {
-        questionId: q._id,
-        question: q.question,
-        options: q.options,
-        selectedAnswer: answers[i],
-        correctAnswer: q.correctAnswer,
-        isCorrect,
-        explanation: q.explanation,
-      };
-    });
+			return {
+				questionId: q._id,
+				question: q.question,
+				options: q.options,
+				selectedAnswer: answers[i],
+				correctAnswer: q.correctAnswer,
+				isCorrect,
+				explanation: q.explanation,
+			};
+		});
 
-    const score = Math.round((correctCount / questions.length) * 100);
-    const passed = score >= quiz.passingScore;
+		const score = Math.round((correctCount / questions.length) * 100);
+		const passed = score >= quiz.passingScore;
 
-    // Save attempt
-    const attemptId = await ctx.db.insert('quizAttempts', {
-      userId: identity.subject,
-      quizId,
-      answers,
-      score,
-      passed,
-      submittedAt: Date.now(),
-    });
+		// Save attempt
+		const attemptId = await ctx.db.insert('quizAttempts', {
+			userId: identity.subject,
+			quizId,
+			answers,
+			score,
+			passed,
+			submittedAt: Date.now(),
+		});
 
-    return {
-      attemptId,
-      score,
-      passed,
-      results,  // Includes explanations for ALL questions
-      passingScore: quiz.passingScore,
-      attemptsUsed: attempts.length + 1,
-      attemptsRemaining: quiz.maxAttempts ? quiz.maxAttempts - attempts.length - 1 : null,
-    };
-  },
+		return {
+			attemptId,
+			score,
+			passed,
+			results, // Includes explanations for ALL questions
+			passingScore: quiz.passingScore,
+			attemptsUsed: attempts.length + 1,
+			attemptsRemaining: quiz.maxAttempts ? quiz.maxAttempts - attempts.length - 1 : null,
+		};
+	},
 });
 ```
 
@@ -311,32 +317,30 @@ export const submit = mutation({
 **Purpose**: Get user's best quiz attempt (highest score)
 
 **Use Cases**:
+
 - Display best score on quiz card
 - Show "View Best Attempt" link
 - Analytics
 
 **Pattern**:
+
 ```typescript
 export const getBestAttempt = query({
-  args: { quizId: v.id('quizzes') },
-  handler: async (ctx, { quizId }) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) return null;
+	args: { quizId: v.id('quizzes') },
+	handler: async (ctx, { quizId }) => {
+		const identity = await ctx.auth.getUserIdentity();
+		if (!identity) return null;
 
-    const attempts = await ctx.db
-      .query('quizAttempts')
-      .withIndex('by_user_quiz', q =>
-        q.eq('userId', identity.subject).eq('quizId', quizId)
-      )
-      .collect();
+		const attempts = await ctx.db
+			.query('quizAttempts')
+			.withIndex('by_user_quiz', q => q.eq('userId', identity.subject).eq('quizId', quizId))
+			.collect();
 
-    if (attempts.length === 0) return null;
+		if (attempts.length === 0) return null;
 
-    // Return attempt with highest score
-    return attempts.reduce((best, current) =>
-      current.score > best.score ? current : best
-    );
-  },
+		// Return attempt with highest score
+		return attempts.reduce((best, current) => (current.score > best.score ? current : best));
+	},
 });
 ```
 
@@ -345,50 +349,51 @@ export const getBestAttempt = query({
 **Purpose**: Retrieve detailed results for a specific attempt
 
 **Pattern**:
+
 ```typescript
 export const getAttemptResults = query({
-  args: { attemptId: v.id('quizAttempts') },
-  handler: async (ctx, { attemptId }) => {
-    const attempt = await ctx.db.get(attemptId);
-    if (!attempt) return null;
+	args: { attemptId: v.id('quizAttempts') },
+	handler: async (ctx, { attemptId }) => {
+		const attempt = await ctx.db.get(attemptId);
+		if (!attempt) return null;
 
-    const identity = await ctx.auth.getUserIdentity();
+		const identity = await ctx.auth.getUserIdentity();
 
-    // Verify user owns this attempt OR is instructor
-    if (attempt.userId !== identity?.subject) {
-      const quiz = await ctx.db.get(attempt.quizId);
-      const course = await ctx.db.get(quiz.courseId);
+		// Verify user owns this attempt OR is instructor
+		if (attempt.userId !== identity?.subject) {
+			const quiz = await ctx.db.get(attempt.quizId);
+			const course = await ctx.db.get(quiz.courseId);
 
-      if (course.instructorId !== identity?.subject) {
-        throw new Error('Not authorized');
-      }
-    }
+			if (course.instructorId !== identity?.subject) {
+				throw new Error('Not authorized');
+			}
+		}
 
-    const quiz = await ctx.db.get(attempt.quizId);
-    const questions = await ctx.db
-      .query('quizQuestions')
-      .withIndex('by_quiz', q => q.eq('quizId', attempt.quizId))
-      .collect();
+		const quiz = await ctx.db.get(attempt.quizId);
+		const questions = await ctx.db
+			.query('quizQuestions')
+			.withIndex('by_quiz', q => q.eq('quizId', attempt.quizId))
+			.collect();
 
-    const sortedQuestions = questions.sort((a, b) => a.order - b.order);
+		const sortedQuestions = questions.sort((a, b) => a.order - b.order);
 
-    const results = sortedQuestions.map((q, i) => ({
-      question: q.question,
-      options: q.options,
-      selectedAnswer: attempt.answers[i],
-      correctAnswer: q.correctAnswer,
-      isCorrect: q.correctAnswer === attempt.answers[i],
-      explanation: q.explanation,
-    }));
+		const results = sortedQuestions.map((q, i) => ({
+			question: q.question,
+			options: q.options,
+			selectedAnswer: attempt.answers[i],
+			correctAnswer: q.correctAnswer,
+			isCorrect: q.correctAnswer === attempt.answers[i],
+			explanation: q.explanation,
+		}));
 
-    return {
-      score: attempt.score,
-      passed: attempt.passed,
-      submittedAt: attempt.submittedAt,
-      passingScore: quiz.passingScore,
-      results,
-    };
-  },
+		return {
+			score: attempt.score,
+			passed: attempt.passed,
+			submittedAt: attempt.submittedAt,
+			passingScore: quiz.passingScore,
+			results,
+		};
+	},
 });
 ```
 
@@ -421,11 +426,13 @@ export const getAttemptResults = query({
 **File**: `components/course-wizard/ai-quiz-generator.tsx`
 
 **Changes Needed** (Story 102.4a):
+
 - Add `explanation` textarea field to question form
 - Add quiz settings (passingScore slider, maxAttempts input)
 - Update QuizQuestion interface to include `explanation?: string`
 
 **Current Flow**:
+
 ```
 1. User clicks "Generate Quiz" in wizard
 2. AI generates questions (title, options, correctAnswer)
@@ -434,6 +441,7 @@ export const getAttemptResults = query({
 ```
 
 **Enhanced Flow** (Story 102.4a):
+
 ```
 1. User sets quiz settings (passingScore, maxAttempts)
 2. AI generates questions WITH explanations
@@ -446,12 +454,14 @@ export const getAttemptResults = query({
 **File**: `app/courses/[id]/learn/page.tsx`
 
 **Changes Needed** (Story 102.4b):
+
 - Build quiz taking interface component
 - Build results display component
 - Handle attempt tracking UI
 - Show "Retake Quiz" / "Max Attempts Reached" states
 
 **Pattern**:
+
 ```typescript
 'use client';
 import { useQuery, useMutation } from 'convex/react';
@@ -514,11 +524,13 @@ export function QuizInterface({ quizId }) {
 
 **Status**: DRAFTED (BACKLOG)
 **Files to Create/Modify**:
+
 - Extend `convex/quizzes.ts`
 - Add `submit()`, `getBestAttempt()`, `getAttemptResults()`
 - Write comprehensive tests
 
 **Acceptance Criteria**:
+
 - [ ] submit() grades quiz correctly
 - [ ] maxAttempts enforced (if present)
 - [ ] Results include explanations for ALL questions
@@ -529,10 +541,12 @@ export function QuizInterface({ quizId }) {
 
 **Status**: BACKLOG
 **Files to Modify**:
+
 - `convex/schema.ts` (add maxAttempts, deleted, deletedAt fields)
 - `convex/quizzes.ts` (add update, remove, restore mutations)
 
 **Acceptance Criteria**:
+
 - [ ] update() modifies quiz details
 - [ ] remove() soft-deletes quiz
 - [ ] restore() un-deletes quiz
@@ -544,10 +558,12 @@ export function QuizInterface({ quizId }) {
 
 **Status**: BACKLOG
 **Files to Modify**:
+
 - `components/course-wizard/ai-quiz-generator.tsx`
 - QuizQuestion interface
 
 **Acceptance Criteria**:
+
 - [ ] Explanation textarea added to question form
 - [ ] Quiz settings form (passingScore, maxAttempts)
 - [ ] AI generates explanations
@@ -557,11 +573,13 @@ export function QuizInterface({ quizId }) {
 
 **Status**: BACKLOG
 **Files to Create**:
+
 - `components/quiz/QuizTakingInterface.tsx`
 - `components/quiz/QuizResults.tsx`
 - `components/quiz/QuizProgress.tsx`
 
 **Acceptance Criteria**:
+
 - [ ] Quiz taking interface complete
 - [ ] Results show score, pass/fail, explanations for ALL questions
 - [ ] Attempt tracking UI ("Attempt X of Y")
@@ -578,12 +596,14 @@ export function QuizInterface({ quizId }) {
 **File**: `convex/__test__/quizzes.test.ts`
 
 **Test Scenarios (Story 102.1 - COMPLETE)**:
+
 - ✅ create() - authorized instructor
 - ✅ create() - unauthorized user fails
 - ✅ addQuestions() - bulk insert
 - ✅ getQuiz() - returns quiz without correctAnswer for students
 
 **Test Scenarios (Story 102.2 - TODO)**:
+
 - [ ] submit() - correct answers get 100%
 - [ ] submit() - incorrect answers get 0%
 - [ ] submit() - mixed answers calculate correctly
@@ -594,6 +614,7 @@ export function QuizInterface({ quizId }) {
 - [ ] getAttemptResults() - authorization check
 
 **Test Scenarios (Story 102.3 - TODO)**:
+
 - [ ] update() - modifies quiz details
 - [ ] remove() - soft-deletes quiz
 - [ ] restore() - un-deletes quiz
@@ -634,10 +655,12 @@ export function QuizInterface({ quizId }) {
 **Concern**: Grading happens synchronously in submit()
 
 **Current Approach**: O(N) where N = number of questions
+
 - Acceptable for MVP (quizzes have ~10-20 questions)
 - Sub-100ms for typical quiz
 
 **Future Optimization**:
+
 - Cache quiz questions (invalidate on update)
 - Batch grade multiple quizzes
 - Background job for complex grading (essay questions)

@@ -29,11 +29,13 @@ Empower medical aesthetics professionals to expand their skills, increase their 
 ## Target Users
 
 ### Students
+
 - **Who**: Nurses, Estheticians, Physicians, PAs
 - **Pain Points**: Expensive training ($2K-$10K), lack of credentials, access barriers
 - **Needs**: Affordable, credentialed, online education
 
 ### Instructors
+
 - **Who**: Experienced medical aesthetics practitioners
 - **Pain Points**: High platform fees (50-63%), no credential support, marketing burden
 - **Needs**: High revenue share (93%), verification support, student analytics
@@ -43,12 +45,14 @@ Empower medical aesthetics professionals to expand their skills, increase their 
 ## Core Value Propositions
 
 ### For Students
+
 - Affordable courses (vs. $2K-$10K in-person)
 - CE credits available
 - Progress tracking and certificates
 - Learn at your own pace
 
 ### For Instructors
+
 - 93% revenue share (vs. 37-50% on Udemy)
 - Credential verification
 - Analytics dashboard
@@ -58,13 +62,13 @@ Empower medical aesthetics professionals to expand their skills, increase their 
 
 ## Key Differentiators
 
-| Feature | Doctrina LMS | Competitors |
-|---------|--------------|-------------|
-| **Niche Focus** | Medical aesthetics only | General education |
-| **Revenue Share** | 93% (Elite tier) | 37-50% (Udemy) |
-| **Instructor Vetting** | Rigorous license verification | Self-serve |
-| **CE Credits** | Supported | Rare |
-| **Real-Time Updates** | Built-in (Convex) | Polling/refresh |
+| Feature                | Doctrina LMS                  | Competitors       |
+| ---------------------- | ----------------------------- | ----------------- |
+| **Niche Focus**        | Medical aesthetics only       | General education |
+| **Revenue Share**      | 93% (Elite tier)              | 37-50% (Udemy)    |
+| **Instructor Vetting** | Rigorous license verification | Self-serve        |
+| **CE Credits**         | Supported                     | Rare              |
+| **Real-Time Updates**  | Built-in (Convex)             | Polling/refresh   |
 
 ---
 

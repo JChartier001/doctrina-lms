@@ -5,6 +5,7 @@ This folder documents key technical decisions made for the Doctrina LMS project,
 ## Purpose
 
 Architecture decisions capture:
+
 - **What** decision was made
 - **Why** it was made (context, constraints, trade-offs)
 - **When** it was made
@@ -38,21 +39,25 @@ Each decision follows this structure:
 ## Consequences
 
 ### Positive
+
 - [Good outcome 1]
 - [Good outcome 2]
 
 ### Negative
+
 - [Trade-off 1]
 - [Trade-off 2]
 
 ## Alternatives Considered
 
 ### Alternative 1
+
 - **Pros**: ...
 - **Cons**: ...
 - **Why Not**: ...
 
 ### Alternative 2
+
 - **Pros**: ...
 - **Cons**: ...
 - **Why Not**: ...
@@ -96,6 +101,7 @@ Read these decisions to understand **why** the codebase is structured the way it
 ### For Technical Discussions
 
 When debating architecture changes:
+
 1. Check if a decision already exists
 2. If it does, reference it or propose superseding it
 3. If it doesn't, create a new ADR
@@ -103,6 +109,7 @@ When debating architecture changes:
 ### For Implementation
 
 When implementing a feature:
+
 1. Check relevant ADRs
 2. Follow the established patterns
 3. If you must deviate, document why (create new ADR or update existing)
@@ -118,6 +125,7 @@ When implementing a feature:
 ### When to Create an ADR
 
 Create an ADR when:
+
 - Choosing between multiple technical approaches
 - Making a decision with long-term impact
 - Establishing a pattern that will be followed project-wide

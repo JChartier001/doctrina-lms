@@ -77,6 +77,7 @@ _bmad-output/
 **Purpose**: The **bible** that all BMAD agents reference
 
 **Contains**:
+
 - Tech stack overview
 - Critical coding standards
 - Architecture principles
@@ -92,6 +93,7 @@ _bmad-output/
 **Purpose**: Guide for what work remains
 
 **Contains**:
+
 - Incomplete work priorities
 - Next stories to implement
 - What needs to be built (not status tracking)
@@ -106,6 +108,7 @@ _bmad-output/
 **Purpose**: Explain the transition from Droidz to BMAD
 
 **Contains**:
+
 - What Droidz was
 - What BMAD is
 - Key differences
@@ -125,11 +128,13 @@ _bmad-output/
 **Purpose**: Technical context for each epic
 
 **Files**:
+
 - `epic-101-progress-tracking.md` (13 pts, Sprint 2)
 - `epic-102-quiz-system.md` (25 pts, Sprint 2-3)
 - More to be created as epics are planned
 
 **Contains per Epic**:
+
 - Problem statement
 - Technical architecture (schema, functions)
 - Stories breakdown with status
@@ -145,12 +150,14 @@ _bmad-output/
 **Purpose**: Document key technical decisions (ADRs)
 
 **Files**:
+
 - `001-convex-as-backend.md` - Why Convex
 - `002-nextjs-app-router.md` - Why App Router
 - `005-usestate-less-pattern.md` - Why avoid useState for server data
 - More ADRs to be added as decisions are made
 
 **Contains per ADR**:
+
 - Context (why decision was needed)
 - Decision made
 - Rationale (why this over alternatives)
@@ -185,6 +192,7 @@ _bmad-output/
 ### For Dev Agent (Amelia)
 
 **Before Starting Story**:
+
 1. Check `active-sprint.md` → Next story
 2. Read `project-context.md` → Patterns
 3. Read epic summary → Architecture
@@ -192,12 +200,14 @@ _bmad-output/
 5. Read story context XML → Implementation details
 
 **During Implementation**:
+
 - Follow TDD red-green-refactor
 - Reference `project-context.md` for patterns
 - Check architecture decisions for guidance
 - Ensure 100% test coverage
 
 **After Completion**:
+
 - Mark story as done
 - Update sprint status
 - Trigger code review
@@ -205,11 +215,13 @@ _bmad-output/
 ### For Architect Agent (Winston)
 
 **During Planning**:
+
 - Create epic summaries
 - Document architecture decisions (ADRs)
 - Update `project-context.md` with new patterns
 
 **During Implementation**:
+
 - Review epic summaries for accuracy
 - Update ADRs when decisions change
 - Guide dev agents on architectural questions
@@ -217,11 +229,13 @@ _bmad-output/
 ### For PM Agent (John)
 
 **During Sprint Planning**:
+
 - Update `active-sprint.md` with new sprint info
 - Ensure epic summaries exist for planned epics
 - Validate story prioritization
 
 **During Sprint**:
+
 - Check `active-sprint.md` for progress
 - Update sprint metrics
 - Adjust backlog as needed
@@ -229,10 +243,12 @@ _bmad-output/
 ### For Test Architect Agent (Murat)
 
 **During Story Planning**:
+
 - Review epic summaries for testing strategy
 - Ensure test coverage requirements clear
 
 **During Implementation**:
+
 - Validate test coverage
 - Review test quality
 - Update testing sections in epic summaries
@@ -243,35 +259,39 @@ _bmad-output/
 
 ### Who Updates What
 
-| Document | Primary Owner | Update Frequency |
-|----------|--------------|------------------|
-| `project-context.md` | Architect (Winston) | After major decisions |
-| `active-sprint.md` | SM (Bob), PM (John) | Daily during sprint |
-| `migration-from-droidz.md` | Analyst (Mary) | Once (historical) |
-| `epic-summaries/*.md` | SM (Bob), Architect (Winston) | Per epic creation, after epic completion |
-| `architecture-decisions/*.md` | Architect (Winston) | Per architectural decision |
+| Document                      | Primary Owner                 | Update Frequency                         |
+| ----------------------------- | ----------------------------- | ---------------------------------------- |
+| `project-context.md`          | Architect (Winston)           | After major decisions                    |
+| `active-sprint.md`            | SM (Bob), PM (John)           | Daily during sprint                      |
+| `migration-from-droidz.md`    | Analyst (Mary)                | Once (historical)                        |
+| `epic-summaries/*.md`         | SM (Bob), Architect (Winston) | Per epic creation, after epic completion |
+| `architecture-decisions/*.md` | Architect (Winston)           | Per architectural decision               |
 
 ### Update Triggers
 
 **project-context.md**:
+
 - New tech stack choice
 - New coding pattern adopted
 - New anti-pattern discovered
 - Major architecture change
 
 **active-sprint.md**:
+
 - Sprint start (new sprint details)
 - Story completion (update status)
 - Daily progress updates
 - Sprint end (metrics summary)
 
 **epic-summaries**:
+
 - Epic planning (initial creation)
 - Story completion (mark story status)
 - Architecture change (update technical details)
 - Epic retrospective (capture learnings)
 
 **architecture-decisions**:
+
 - New architectural decision made
 - Existing decision superseded
 - Decision deprecated
@@ -293,6 +313,7 @@ _bmad-output/
 ### 3. Follow TDD Red-Green-Refactor
 
 **Pattern**:
+
 1. Write failing test
 2. Write minimal code to pass
 3. Refactor while keeping tests green
@@ -324,6 +345,7 @@ _bmad-output/
 ### Q: Where do I find coding standards?
 
 **A**:
+
 1. **Primary**: `.claude/standards/` (Next.js, React, TypeScript, Convex-specific)
 2. **Project-specific**: `_bmad-output/project-context.md` (patterns, anti-patterns)
 3. **Reference**: `droidz/standards/` (broader patterns, still valid)
@@ -335,6 +357,7 @@ _bmad-output/
 ### Q: Where is the sprint status?
 
 **A**:
+
 - **YAML (official)**: `docs/sprint-status.yaml`
 - **Markdown (human)**: `docs/bmm-workflow-status.md`
 - **Active sprint (BMAD)**: `_bmad-output/active-sprint.md`
@@ -342,6 +365,7 @@ _bmad-output/
 ### Q: Where are the epics?
 
 **A**:
+
 - **High-level**: `docs/EPICS.md` (product-focused)
 - **Technical**: `_bmad-output/epic-summaries/` (implementation-focused)
 
@@ -360,6 +384,7 @@ _bmad-output/
 ### Q: How do I create a new ADR?
 
 **A**:
+
 1. Copy template from `architecture-decisions/README.md`
 2. Number sequentially (check last ADR)
 3. Write clearly
@@ -394,26 +419,26 @@ _bmad-output/
 
 ## Document Status Legend
 
-| Status | Meaning |
-|--------|---------|
-| ⭐ CRITICAL | Must-read for all agents |
-| ✅ Complete | Fully documented |
-| 🚧 In Progress | Partially documented |
-| 📋 Planned | To be created |
-| 🔴 Deprecated | Historical reference only |
+| Status         | Meaning                   |
+| -------------- | ------------------------- |
+| ⭐ CRITICAL    | Must-read for all agents  |
+| ✅ Complete    | Fully documented          |
+| 🚧 In Progress | Partially documented      |
+| 📋 Planned     | To be created             |
+| 🔴 Deprecated  | Historical reference only |
 
 ### Current Document Status
 
-| Document | Status |
-|----------|--------|
-| `project-context.md` | ⭐ CRITICAL ✅ |
-| `active-sprint.md` | ⭐ CRITICAL ✅ |
-| `migration-from-droidz.md` | ✅ Complete |
-| `epic-summaries/epic-101-progress-tracking.md` | ✅ Complete |
-| `epic-summaries/epic-102-quiz-system.md` | ✅ Complete |
-| `architecture-decisions/001-convex-as-backend.md` | ✅ Complete |
-| `architecture-decisions/002-nextjs-app-router.md` | ✅ Complete |
-| `architecture-decisions/005-usestate-less-pattern.md` | ✅ Complete |
+| Document                                              | Status         |
+| ----------------------------------------------------- | -------------- |
+| `project-context.md`                                  | ⭐ CRITICAL ✅ |
+| `active-sprint.md`                                    | ⭐ CRITICAL ✅ |
+| `migration-from-droidz.md`                            | ✅ Complete    |
+| `epic-summaries/epic-101-progress-tracking.md`        | ✅ Complete    |
+| `epic-summaries/epic-102-quiz-system.md`              | ✅ Complete    |
+| `architecture-decisions/001-convex-as-backend.md`     | ✅ Complete    |
+| `architecture-decisions/002-nextjs-app-router.md`     | ✅ Complete    |
+| `architecture-decisions/005-usestate-less-pattern.md` | ✅ Complete    |
 
 ---
 

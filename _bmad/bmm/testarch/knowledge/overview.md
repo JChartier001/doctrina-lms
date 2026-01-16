@@ -38,17 +38,17 @@ npm install -D @seontechnologies/playwright-utils
 
 ### Core Testing Utilities
 
-| Utility                    | Purpose                                              | Test Context       |
-| -------------------------- | ---------------------------------------------------- | ------------------ |
-| **api-request**            | Typed HTTP client with schema validation and retry   | **API/Backend**    |
-| **recurse**                | Polling for async operations, background jobs        | **API/Backend**    |
-| **auth-session**           | Token persistence, multi-user, service-to-service    | **API/Backend/UI** |
-| **log**                    | Playwright report-integrated logging                 | **API/Backend/UI** |
-| **file-utils**             | CSV/XLSX/PDF/ZIP reading & validation                | **API/Backend/UI** |
-| **burn-in**                | Smart test selection with git diff                   | **CI/CD**          |
-| **network-recorder**       | HAR record/playback for offline testing              | UI only            |
-| **intercept-network-call** | Network spy/stub with auto JSON parsing              | UI only            |
-| **network-error-monitor**  | Automatic HTTP 4xx/5xx detection                     | UI only            |
+| Utility                    | Purpose                                            | Test Context       |
+| -------------------------- | -------------------------------------------------- | ------------------ |
+| **api-request**            | Typed HTTP client with schema validation and retry | **API/Backend**    |
+| **recurse**                | Polling for async operations, background jobs      | **API/Backend**    |
+| **auth-session**           | Token persistence, multi-user, service-to-service  | **API/Backend/UI** |
+| **log**                    | Playwright report-integrated logging               | **API/Backend/UI** |
+| **file-utils**             | CSV/XLSX/PDF/ZIP reading & validation              | **API/Backend/UI** |
+| **burn-in**                | Smart test selection with git diff                 | **CI/CD**          |
+| **network-recorder**       | HAR record/playback for offline testing            | UI only            |
+| **intercept-network-call** | Network spy/stub with auto JSON parsing            | UI only            |
+| **network-error-monitor**  | Automatic HTTP 4xx/5xx detection                   | UI only            |
 
 **Note**: 6 of 9 utilities work without a browser. Only 3 are UI-specific (network-recorder, intercept-network-call, network-error-monitor).
 
@@ -65,22 +65,22 @@ npm install -D @seontechnologies/playwright-utils
 import { apiRequest } from '@seontechnologies/playwright-utils';
 
 test('direct usage', async ({ request }) => {
-  const { status, body } = await apiRequest({
-    request, // Must pass request context
-    method: 'GET',
-    path: '/api/users',
-  });
+	const { status, body } = await apiRequest({
+		request, // Must pass request context
+		method: 'GET',
+		path: '/api/users',
+	});
 });
 
 // Fixture import (context injected automatically)
 import { test } from '@seontechnologies/playwright-utils/fixtures';
 
 test('fixture usage', async ({ apiRequest }) => {
-  const { status, body } = await apiRequest({
-    // No need to pass request context
-    method: 'GET',
-    path: '/api/users',
-  });
+	const { status, body } = await apiRequest({
+		// No need to pass request context
+		method: 'GET',
+		path: '/api/users',
+	});
 });
 ```
 
@@ -138,18 +138,18 @@ export { expect } from '@playwright/test';
 import { test, expect } from '../support/merged-fixtures';
 
 test('all utilities available', async ({ apiRequest, authToken, recurse, log }) => {
-  await log.step('Making authenticated API request');
+	await log.step('Making authenticated API request');
 
-  const { body } = await apiRequest({
-    method: 'GET',
-    path: '/api/protected',
-    headers: { Authorization: `Bearer ${authToken}` },
-  });
+	const { body } = await apiRequest({
+		method: 'GET',
+		path: '/api/protected',
+		headers: { Authorization: `Bearer ${authToken}` },
+	});
 
-  await recurse(
-    () => apiRequest({ method: 'GET', path: `/status/${body.id}` }),
-    (res) => res.body.ready === true,
-  );
+	await recurse(
+		() => apiRequest({ method: 'GET', path: `/status/${body.id}` }),
+		res => res.body.ready === true,
+	);
 });
 ```
 
@@ -170,9 +170,9 @@ test('all utilities available', async ({ apiRequest, authToken, recurse, log }) 
 import { log } from '@seontechnologies/playwright-utils';
 
 test('existing test', async ({ page }) => {
-  await log.step('Navigate to page'); // Just add logging
-  await page.goto('/dashboard');
-  // Rest of test unchanged
+	await log.step('Navigate to page'); // Just add logging
+	await page.goto('/dashboard');
+	// Rest of test unchanged
 });
 ```
 
@@ -182,12 +182,12 @@ test('existing test', async ({ page }) => {
 import { test } from '@seontechnologies/playwright-utils/api-request/fixtures';
 
 test('API test', async ({ apiRequest }) => {
-  const { status, body } = await apiRequest({
-    method: 'GET',
-    path: '/api/users',
-  });
+	const { status, body } = await apiRequest({
+		method: 'GET',
+		path: '/api/users',
+	});
 
-  expect(status).toBe(200);
+	expect(status).toBe(200);
 });
 ```
 
@@ -197,14 +197,14 @@ test('API test', async ({ apiRequest }) => {
 import { test } from '@seontechnologies/playwright-utils/fixtures';
 
 test('UI with network control', async ({ page, interceptNetworkCall }) => {
-  const usersCall = interceptNetworkCall({
-    url: '**/api/users',
-  });
+	const usersCall = interceptNetworkCall({
+		url: '**/api/users',
+	});
 
-  await page.goto('/dashboard');
-  const { responseJson } = await usersCall;
+	await page.goto('/dashboard');
+	const { responseJson } = await usersCall;
 
-  expect(responseJson).toHaveLength(10);
+	expect(responseJson).toHaveLength(10);
 });
 ```
 
@@ -232,8 +232,8 @@ import { apiRequest } from '@seontechnologies/playwright-utils';
 import { test } from '@seontechnologies/playwright-utils/auth-session/fixtures';
 
 test('bad', async ({ request, authToken }) => {
-  // Confusing - mixing direct (needs request) and fixture (has authToken)
-  await apiRequest({ request, method: 'GET', path: '/api/users' });
+	// Confusing - mixing direct (needs request) and fixture (has authToken)
+	await apiRequest({ request, method: 'GET', path: '/api/users' });
 });
 ```
 
@@ -243,8 +243,8 @@ test('bad', async ({ request, authToken }) => {
 import { test } from '../support/merged-fixtures';
 
 test('good', async ({ apiRequest, authToken }) => {
-  // Clean - all from fixtures
-  await apiRequest({ method: 'GET', path: '/api/users' });
+	// Clean - all from fixtures
+	await apiRequest({ method: 'GET', path: '/api/users' });
 });
 ```
 

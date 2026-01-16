@@ -9,6 +9,7 @@
 ## Context
 
 Doctrina LMS needed a backend solution that could:
+
 - Handle real-time data updates (progress tracking, live sessions, notifications)
 - Scale from MVP to production without infrastructure management
 - Provide type-safety end-to-end (TypeScript)
@@ -17,6 +18,7 @@ Doctrina LMS needed a backend solution that could:
 - Enable rapid development
 
 Traditional options included:
+
 - PostgreSQL/MySQL with REST API
 - MongoDB with REST API
 - Firebase Realtime Database/Firestore
@@ -28,6 +30,7 @@ Traditional options included:
 We chose **Convex** as the backend platform for Doctrina LMS.
 
 Convex is a serverless backend platform that provides:
+
 - **Real-time database** with automatic subscriptions
 - **End-to-end TypeScript** with generated types
 - **Serverless functions** (queries, mutations, actions)
@@ -42,12 +45,14 @@ Convex is a serverless backend platform that provides:
 #### vs. PostgreSQL + REST API
 
 **Convex Advantages**:
+
 - Real-time updates built-in (no WebSocket setup)
 - No ORM needed (native TypeScript)
 - Serverless (no database provisioning)
 - Automatic type generation
 
 **Trade-offs**:
+
 - PostgreSQL more mature ecosystem
 - PostgreSQL has more SQL tooling
 
@@ -56,12 +61,14 @@ Convex is a serverless backend platform that provides:
 #### vs. Firebase Firestore
 
 **Convex Advantages**:
+
 - Better TypeScript support
 - Relational data modeling (indexes, joins)
 - Transactional consistency (ACID)
 - Better query performance for complex filters
 
 **Trade-offs**:
+
 - Firebase has larger ecosystem
 - Firebase has more third-party integrations
 
@@ -70,12 +77,14 @@ Convex is a serverless backend platform that provides:
 #### vs. Supabase
 
 **Convex Advantages**:
+
 - Better TypeScript DX (generated types)
 - Simpler real-time subscriptions (no channels to manage)
 - No SQL knowledge required
 - Faster development velocity
 
 **Trade-offs**:
+
 - Supabase offers PostgreSQL (more familiar)
 - Supabase has built-in auth (though we're using Clerk)
 
@@ -113,9 +122,9 @@ Convex is a serverless backend platform that provides:
 import { query } from './_generated/server';
 
 export const list = query({
-  handler: async (ctx) => {
-    return await ctx.db.query('courses').collect();
-  },
+	handler: async ctx => {
+		return await ctx.db.query('courses').collect();
+	},
 });
 ```
 
@@ -127,16 +136,16 @@ import { mutation } from './_generated/server';
 import { v } from 'convex/values';
 
 export const create = mutation({
-  args: {
-    title: v.string(),
-    description: v.string(),
-  },
-  handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) throw new Error('Unauthorized');
+	args: {
+		title: v.string(),
+		description: v.string(),
+	},
+	handler: async (ctx, args) => {
+		const identity = await ctx.auth.getUserIdentity();
+		if (!identity) throw new Error('Unauthorized');
 
-    return await ctx.db.insert('courses', args);
-  },
+		return await ctx.db.insert('courses', args);
+	},
 });
 ```
 
@@ -164,12 +173,14 @@ export function CourseList() {
 ### Alternative 1: PostgreSQL + Prisma + tRPC
 
 **Pros**:
+
 - Battle-tested database (PostgreSQL)
 - Strong ORM (Prisma) with type generation
 - Type-safe API (tRPC)
 - Familiar SQL
 
 **Cons**:
+
 - Complex setup (database provisioning, migrations, API routes)
 - Real-time requires WebSocket setup (Socket.io or similar)
 - More operational overhead
@@ -180,12 +191,14 @@ export function CourseList() {
 ### Alternative 2: Firebase Firestore
 
 **Pros**:
+
 - Real-time subscriptions built-in
 - Serverless, scalable
 - Large ecosystem
 - Good documentation
 
 **Cons**:
+
 - NoSQL limitations (no complex queries, no joins)
 - Weaker TypeScript support
 - Denormalization required for performance
@@ -196,12 +209,14 @@ export function CourseList() {
 ### Alternative 3: Supabase (PostgreSQL + Realtime)
 
 **Pros**:
+
 - PostgreSQL (relational)
 - Real-time subscriptions
 - Built-in auth
 - Familiar SQL
 
 **Cons**:
+
 - Complex real-time setup (channels)
 - Requires SQL knowledge
 - Less TypeScript-native than Convex
@@ -215,11 +230,13 @@ export function CourseList() {
 ### If We Need to Migrate Away from Convex
 
 **Likely Reasons**:
+
 - Cost becomes prohibitive at scale
 - Feature limitations (e.g., full-text search)
 - Company policy requires self-hosted database
 
 **Migration Path**:
+
 1. **Schema Migration**: Convert Convex schema to SQL schema (PostgreSQL)
 2. **Data Migration**: Export Convex data, transform, import to PostgreSQL
 3. **Backend Migration**: Rewrite queries/mutations as REST API or GraphQL
@@ -229,6 +246,7 @@ export function CourseList() {
 **Estimated Effort**: 4-6 weeks for full migration
 
 **Risk Mitigation**:
+
 - Keep business logic in service layer (not in Convex functions)
 - Use TypeScript types that can be shared across backends
 - Document data model thoroughly

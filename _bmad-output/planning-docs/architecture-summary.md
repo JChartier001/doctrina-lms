@@ -7,6 +7,7 @@
 ## Tech Stack
 
 ### Frontend
+
 - **Framework**: Next.js 16.0.1 (App Router)
 - **UI Library**: React 19.2.0
 - **Styling**: Tailwind CSS 4.1.17
@@ -15,11 +16,13 @@
 - **Language**: TypeScript 5.9.3 (strict)
 
 ### Backend
+
 - **Database**: Convex 1.28.2 (serverless, real-time)
 - **Auth**: Clerk 6.34.5
 - **Payments**: Stripe 19.3.0
 
 ### Development
+
 - **Testing**: Vitest 4.0.8
 - **Package Manager**: Yarn 4.10.3
 - **Node**: 24.10.0 (Volta)
@@ -57,6 +60,7 @@
 ## Key Architecture Decisions
 
 ### Why Convex?
+
 - Real-time subscriptions built-in
 - Type-safe end-to-end (generated types)
 - Serverless (zero infrastructure)
@@ -66,6 +70,7 @@
 **See**: `_bmad-output/architecture-decisions/001-convex-as-backend.md`
 
 ### Why Next.js App Router?
+
 - Server Components reduce client JS
 - Streaming SSR for faster loads
 - Layouts for code organization
@@ -74,6 +79,7 @@
 **See**: `_bmad-output/architecture-decisions/002-nextjs-app-router.md`
 
 ### Why Clerk?
+
 - Drop-in authentication
 - User management built-in
 - OAuth providers supported
@@ -84,6 +90,7 @@
 ## Core Patterns
 
 ### Server Component (Default)
+
 ```typescript
 // No 'use client' - server by default
 export default async function CoursesPage() {
@@ -93,6 +100,7 @@ export default async function CoursesPage() {
 ```
 
 ### Client Component (When Needed)
+
 ```typescript
 'use client';
 import { useQuery } from 'convex/react';
@@ -105,21 +113,22 @@ export function CourseList() {
 ```
 
 ### Convex Backend
+
 ```typescript
 // convex/courses.ts
 export const list = query({
-  handler: async (ctx) => {
-    return await ctx.db.query('courses').collect();
-  },
+	handler: async ctx => {
+		return await ctx.db.query('courses').collect();
+	},
 });
 
 export const create = mutation({
-  args: { title: v.string() },
-  handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) throw new Error('Unauthorized');
-    return await ctx.db.insert('courses', args);
-  },
+	args: { title: v.string() },
+	handler: async (ctx, args) => {
+		const identity = await ctx.auth.getUserIdentity();
+		if (!identity) throw new Error('Unauthorized');
+		return await ctx.db.insert('courses', args);
+	},
 });
 ```
 

@@ -12,6 +12,7 @@
 ### What This Document Is
 
 This is the **bible** that all BMAD agents reference before implementing ANY code. It consolidates:
+
 - Tech stack decisions
 - Coding patterns and standards
 - Project-specific constraints
@@ -202,23 +203,23 @@ export function CourseForm() {
 ```typescript
 // ✅ GOOD - Always check auth in mutations
 export const createCourse = mutation({
-  args: { title: v.string() },
-  handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) throw new Error('Unauthorized');
+	args: { title: v.string() },
+	handler: async (ctx, args) => {
+		const identity = await ctx.auth.getUserIdentity();
+		if (!identity) throw new Error('Unauthorized');
 
-    const user = await getUserByClerkId(ctx, identity.subject);
-    if (!user?.isInstructor) throw new Error('Forbidden');
+		const user = await getUserByClerkId(ctx, identity.subject);
+		if (!user?.isInstructor) throw new Error('Forbidden');
 
-    return await ctx.db.insert('courses', { ...args });
-  },
+		return await ctx.db.insert('courses', { ...args });
+	},
 });
 
 // ❌ BAD - No auth check
 export const createCourse = mutation({
-  handler: async (ctx, args) => {
-    return await ctx.db.insert('courses', args); // Anyone can create!
-  },
+	handler: async (ctx, args) => {
+		return await ctx.db.insert('courses', args); // Anyone can create!
+	},
 });
 ```
 
@@ -227,11 +228,11 @@ export const createCourse = mutation({
 ```typescript
 // ✅ GOOD - Descriptive error messages
 if (!enrollment) {
-  throw new Error('Not enrolled in this course');
+	throw new Error('Not enrolled in this course');
 }
 
 if (quiz.maxAttempts && attempts.length >= quiz.maxAttempts) {
-  throw new Error(`Maximum attempts (${quiz.maxAttempts}) reached`);
+	throw new Error(`Maximum attempts (${quiz.maxAttempts}) reached`);
 }
 
 // ❌ BAD - Generic errors
@@ -243,20 +244,22 @@ if (!enrollment) throw new Error('Error');
 ```typescript
 // ✅ GOOD - Queries for reads, mutations for writes
 export const list = query({
-  handler: async (ctx) => {
-    return await ctx.db.query('courses').collect();
-  },
+	handler: async ctx => {
+		return await ctx.db.query('courses').collect();
+	},
 });
 
 export const create = mutation({
-  args: { title: v.string() },
-  handler: async (ctx, args) => {
-    return await ctx.db.insert('courses', args);
-  },
+	args: { title: v.string() },
+	handler: async (ctx, args) => {
+		return await ctx.db.insert('courses', args);
+	},
 });
 
 // ❌ BAD - Mutation for reading data
-export const list = mutation({ /* ... */ });
+export const list = mutation({
+	/* ... */
+});
 ```
 
 ### TypeScript Standards
@@ -264,28 +267,28 @@ export const list = mutation({ /* ... */ });
 ```typescript
 // ✅ GOOD - Explicit types
 interface CourseCardProps {
-  courseId: Id<'courses'>;
-  onEnroll: (courseId: Id<'courses'>) => void;
+	courseId: Id<'courses'>;
+	onEnroll: (courseId: Id<'courses'>) => void;
 }
 
 export function CourseCard({ courseId, onEnroll }: CourseCardProps) {
-  // ...
+	// ...
 }
 
 // ❌ BAD - Implicit any
 export function CourseCard(props) {
-  // TypeScript doesn't know what props contains
+	// TypeScript doesn't know what props contains
 }
 
 // ✅ GOOD - Zod for runtime validation
 const createCourseSchema = z.object({
-  title: z.string().min(1),
-  price: z.number().min(0),
+	title: z.string().min(1),
+	price: z.number().min(0),
 });
 
 // ❌ BAD - No runtime validation
 function createCourse(data: any) {
-  // data could be anything at runtime
+	// data could be anything at runtime
 }
 ```
 
@@ -399,21 +402,21 @@ import schema from '../schema';
 import { markComplete } from '../lessonProgress';
 
 describe('lessonProgress', () => {
-  it('should mark lesson as complete', async () => {
-    const t = convexTest(schema);
+	it('should mark lesson as complete', async () => {
+		const t = convexTest(schema);
 
-    const userId = await t.run(async (ctx) => {
-      return await ctx.db.insert('users', {
-        firstName: 'Test',
-        lastName: 'User',
-        email: 'test@example.com',
-        isInstructor: false,
-        isAdmin: false,
-      });
-    });
+		const userId = await t.run(async ctx => {
+			return await ctx.db.insert('users', {
+				firstName: 'Test',
+				lastName: 'User',
+				email: 'test@example.com',
+				isInstructor: false,
+				isAdmin: false,
+			});
+		});
 
-    // ... rest of test
-  });
+		// ... rest of test
+	});
 });
 ```
 
@@ -459,7 +462,7 @@ describe('lessonProgress', () => {
 // ❌ BAD
 const [courses, setCourses] = useState([]);
 useEffect(() => {
-  fetch('/api/courses').then(data => setCourses(data));
+	fetch('/api/courses').then(data => setCourses(data));
 }, []);
 
 // ✅ GOOD
@@ -471,14 +474,14 @@ const courses = useQuery(api.courses.list);
 ```typescript
 // ❌ BAD - Creating REST endpoints
 export async function GET(request: Request) {
-  // Custom API route
+	// Custom API route
 }
 
 // ✅ GOOD - Use Convex functions
 export const list = query({
-  handler: async (ctx) => {
-    return await ctx.db.query('courses').collect();
-  },
+	handler: async ctx => {
+		return await ctx.db.query('courses').collect();
+	},
 });
 ```
 
@@ -553,10 +556,12 @@ return <div>{courses.map(/* ... */)}</div>;
 **Sprint 2 (Weeks 3-4)**: Backend Development - Progress Tracking & Quiz System
 
 **Active Epics:**
+
 - EPIC-101: Lesson Progress Tracking (13 pts) - IN PROGRESS
 - EPIC-102: Quiz Submission & Grading (25 pts) - IN PROGRESS
 
 **Completed:**
+
 - Sprint 1: Course Structure, Enrollments, Stripe Integration ✅
 
 **See**: `_bmad-output/active-sprint.md` for detailed sprint information
@@ -651,7 +656,9 @@ const data = useQuery(api.table.get);
 ### 3. Mutations Return IDs
 
 ```typescript
-const courseId = await ctx.db.insert('courses', { /* ... */ });
+const courseId = await ctx.db.insert('courses', {
+	/* ... */
+});
 // courseId is Id<'courses'>, not the full object
 ```
 

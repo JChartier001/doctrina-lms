@@ -9,6 +9,7 @@
 ## Context
 
 Doctrina LMS needed a modern React framework that could:
+
 - Render server-side for SEO (course listings, public pages)
 - Support client-side interactivity (dashboards, real-time updates)
 - Provide excellent performance (image optimization, code splitting)
@@ -16,6 +17,7 @@ Doctrina LMS needed a modern React framework that could:
 - Have strong TypeScript support
 
 Next.js offers two routing systems:
+
 1. **Pages Router** (legacy, stable)
 2. **App Router** (new, React Server Components)
 
@@ -24,6 +26,7 @@ Next.js offers two routing systems:
 We chose **Next.js 16 with App Router** (not Pages Router).
 
 The App Router provides:
+
 - **React Server Components** (RSC) by default
 - **Streaming SSR** for faster initial page loads
 - **Layouts and Nested Routing** for better code organization
@@ -37,6 +40,7 @@ The App Router provides:
 #### Server Components by Default
 
 **Benefit**: Most components don't need client-side JavaScript
+
 - Course listings → Server Component (no JS)
 - Dashboard data fetching → Server Component (no JS)
 - Forms, interactive UI → Client Component ('use client')
@@ -46,11 +50,13 @@ The App Router provides:
 #### Streaming and Suspense
 
 **Benefit**: Progressive page rendering
+
 - Show UI shell immediately
 - Stream in data as it loads
 - Better perceived performance
 
 **Pattern**:
+
 ```typescript
 // app/courses/page.tsx
 import { Suspense } from 'react';
@@ -69,11 +75,13 @@ export default function CoursesPage() {
 #### Layouts
 
 **Benefit**: Shared layouts without duplicating code
+
 - Dashboard layout with sidebar
 - Course layout with tabs
 - Auth layout centered
 
 **Pattern**:
+
 ```typescript
 // app/(dashboard)/layout.tsx
 export default function DashboardLayout({ children }) {
@@ -175,15 +183,17 @@ export default async function CoursesPage() {
 ### Alternative 1: Next.js Pages Router
 
 **Pros**:
+
 - More stable (battle-tested)
 - Larger ecosystem (more examples)
 - Simpler mental model (no RSC)
 - Easier debugging
 
 **Cons**:
+
 - More client JavaScript (no Server Components)
 - No streaming SSR
-- No layouts (must use custom _app.tsx patterns)
+- No layouts (must use custom \_app.tsx patterns)
 - Not the future of Next.js
 
 **Why Not**: App Router's performance benefits and future-proofing outweigh Pages Router's stability.
@@ -191,12 +201,14 @@ export default async function CoursesPage() {
 ### Alternative 2: Remix
 
 **Pros**:
+
 - Excellent data loading (loaders/actions)
 - Built-in form handling
 - Nested routing
 - Fast page transitions
 
 **Cons**:
+
 - Smaller ecosystem than Next.js
 - No Server Components yet (coming)
 - Less mature image optimization
@@ -207,12 +219,14 @@ export default async function CoursesPage() {
 ### Alternative 3: Vite + React Router
 
 **Pros**:
+
 - Full control over architecture
 - No framework lock-in
 - Fast development server (Vite)
 - Flexible routing
 
 **Cons**:
+
 - No SSR out of the box
 - Must build SEO solution manually
 - No built-in image optimization
@@ -227,11 +241,13 @@ export default async function CoursesPage() {
 ### If We Need to Revert to Pages Router
 
 **Likely Reasons**:
+
 - App Router bugs become blockers
 - Third-party libraries don't support RSC
 - Team struggles with Server Components mental model
 
 **Migration Path**:
+
 1. Move `app/` files to `pages/`
 2. Convert Server Components to `getServerSideProps` or `getStaticProps`
 3. Remove 'use client' directives (all components are client by default)
@@ -249,6 +265,7 @@ export default async function CoursesPage() {
 ### When to Use Server Components
 
 ✅ **Use Server Components (default)** for:
+
 - Data fetching from Convex
 - Layouts and static UI
 - SEO-critical pages (course listings, landing pages)
@@ -257,6 +274,7 @@ export default async function CoursesPage() {
 ### When to Use Client Components
 
 ✅ **Use Client Components ('use client')** for:
+
 - Interactivity (buttons, forms, modals)
 - Browser APIs (window, localStorage, WebSocket)
 - React hooks (useState, useEffect, useContext)

@@ -90,6 +90,7 @@ Epic summaries provide **deep technical context** that agents need when implemen
 Files are named: `epic-[number]-[short-name].md`
 
 Examples:
+
 - `epic-101-progress-tracking.md`
 - `epic-102-quiz-system.md`
 - `epic-103-reviews.md`

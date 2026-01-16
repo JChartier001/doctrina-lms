@@ -15,6 +15,7 @@ BMAD agents reference these documents when implementing features. All planning d
 **Location**: `PRD.md` (this folder)
 
 **Contains**:
+
 - Vision and mission
 - Strategic goals (50+ courses, 50+ verified instructors by Month 3)
 - Problem statement (market problem for students and instructors)
@@ -24,6 +25,7 @@ BMAD agents reference these documents when implementing features. All planning d
 - Success metrics
 
 **When to Read**:
+
 - Understanding product vision
 - Making product decisions
 - Prioritizing features
@@ -35,6 +37,7 @@ BMAD agents reference these documents when implementing features. All planning d
 **Location**: `ARCHITECTURE.md` (this folder)
 
 **Contains**:
+
 - System architecture overview
 - Tech stack rationale (Next.js, Convex, Clerk, Stripe)
 - Design philosophy (serverless-first, real-time, type-safe)
@@ -43,6 +46,7 @@ BMAD agents reference these documents when implementing features. All planning d
 - Security architecture
 
 **When to Read**:
+
 - Before implementing new features
 - Making architectural decisions
 - Understanding system design
@@ -54,6 +58,7 @@ BMAD agents reference these documents when implementing features. All planning d
 **Location**: `DB-SCHEMA.md` (this folder)
 
 **Contains**:
+
 - Complete table definitions
 - Relationships and indexes
 - Query patterns
@@ -62,6 +67,7 @@ BMAD agents reference these documents when implementing features. All planning d
 - Performance best practices
 
 **When to Read**:
+
 - Before creating/modifying Convex tables
 - Understanding data relationships
 - Writing queries
@@ -73,6 +79,7 @@ BMAD agents reference these documents when implementing features. All planning d
 **Location**: `EPICS.md` (this folder)
 
 **Contains**:
+
 - All epic definitions (EPIC-101 through EPIC-110)
 - Problem statements
 - User stories
@@ -81,6 +88,7 @@ BMAD agents reference these documents when implementing features. All planning d
 - Priority levels (P0, P1, P2)
 
 **When to Read**:
+
 - Sprint planning
 - Story creation
 - Understanding feature scope
@@ -92,6 +100,7 @@ BMAD agents reference these documents when implementing features. All planning d
 **Location**: `TESTING-STRATEGY.md` (this folder)
 
 **Contains**:
+
 - Testing philosophy (100% backend coverage)
 - Test types (unit, integration, E2E)
 - Testing tools (Vitest, convex-test)
@@ -99,6 +108,7 @@ BMAD agents reference these documents when implementing features. All planning d
 - CI/CD integration
 
 **When to Read**:
+
 - Before writing tests
 - Setting up new test suites
 - Debugging test failures
@@ -110,6 +120,7 @@ BMAD agents reference these documents when implementing features. All planning d
 **Location**: `SECURITY-COMPLIANCE.md` (this folder)
 
 **Contains**:
+
 - HIPAA considerations
 - Data privacy requirements
 - Authentication/authorization patterns
@@ -117,6 +128,7 @@ BMAD agents reference these documents when implementing features. All planning d
 - Instructor verification requirements
 
 **When to Read**:
+
 - Implementing auth features
 - Handling sensitive data
 - Instructor vetting workflows
@@ -128,6 +140,7 @@ BMAD agents reference these documents when implementing features. All planning d
 **Location**: `CONVEX.md` (this folder)
 
 **Contains**:
+
 - Convex-specific patterns
 - Query vs mutation guidelines
 - Real-time subscription patterns
@@ -135,6 +148,7 @@ BMAD agents reference these documents when implementing features. All planning d
 - Testing Convex functions
 
 **When to Read**:
+
 - Writing Convex backend functions
 - Implementing real-time features
 - Debugging Convex issues
@@ -198,12 +212,14 @@ Sprint Level:
 ## Relationship to BMAD Docs
 
 ### BMAD Docs (`_bmad-output/`)
+
 - **project-context.md**: Consolidated patterns (references planning docs)
 - **epic-summaries/**: Technical implementation context
 - **architecture-decisions/**: WHY decisions were made (ADRs)
 - **active-sprint.md**: What needs to be done next
 
 ### Planning Docs (`_bmad-output/planning-docs/`)
+
 - **Official source of truth** for product, architecture, schema
 - **Living documents** updated as product evolves
 - **All planning docs** consolidated in this folder
@@ -213,30 +229,37 @@ Sprint Level:
 ## When to Update Planning Docs
 
 ### PRD.md
+
 - **Update When**: Product vision changes, new features added to scope
 - **Owner**: PM (John)
 
 ### ARCHITECTURE.md
+
 - **Update When**: Major tech stack changes, architectural patterns change
 - **Owner**: Architect (Winston)
 
 ### DB-SCHEMA.md
+
 - **Update When**: Tables added/modified, indexes changed
 - **Owner**: Architect (Winston), Dev (Amelia)
 
 ### EPICS.md
+
 - **Update When**: New epics created, epic scope changes
 - **Owner**: SM (Bob), PM (John)
 
 ### TESTING-STRATEGY.md
+
 - **Update When**: Test approach changes, new tools added
 - **Owner**: Test Architect (Murat)
 
 ### SECURITY-COMPLIANCE.md
+
 - **Update When**: New compliance requirements, security patterns change
 - **Owner**: Architect (Winston), Analyst (Mary)
 
 ### CONVEX.md
+
 - **Update When**: New Convex patterns discovered, best practices evolve
 - **Owner**: Dev (Amelia), Architect (Winston)
 

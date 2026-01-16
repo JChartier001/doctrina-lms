@@ -18,9 +18,11 @@ This document guides BMAD agents on **what work remains** and **what to implemen
 **Remaining**: 4 of 5 stories (15 of 25 points)
 
 #### Story 102.2: Quiz Submission & Grading Backend (6 pts)
+
 **Status**: DRAFTED (ready for dev)
 **File**: `docs/stories/story-102.2.md`
 **What to Build**:
+
 - `submit()` mutation - Grade quiz, enforce maxAttempts
 - `getBestAttempt()` query - Get highest score
 - `getAttemptResults()` query - Get detailed results
@@ -29,23 +31,29 @@ This document guides BMAD agents on **what work remains** and **what to implemen
 **Why This Matters**: Students can't take quizzes until this exists
 
 #### Story 102.3: Quiz Management Backend (4 pts)
+
 **Status**: BACKLOG
 **What to Build**:
+
 - Schema: Add maxAttempts, deleted, deletedAt fields
 - `update()` mutation - Update quiz settings
 - `remove()` mutation - Soft-delete quiz
 - `restore()` mutation - Un-delete quiz
 
 #### Story 102.4a: Quiz Creation UI Enhancements (2 pts)
+
 **Status**: BACKLOG
 **What to Build**:
+
 - Add explanation textarea to question form
 - Add quiz settings (passingScore, maxAttempts)
 - Update QuizQuestion interface
 
 #### Story 102.4b: Quiz Taking/Results UI (3 pts)
+
 **Status**: BACKLOG
 **What to Build**:
+
 - Quiz taking interface component
 - Results display with explanations
 - Attempt tracking ("Attempt X of Y")
@@ -58,16 +66,20 @@ This document guides BMAD agents on **what work remains** and **what to implemen
 **Remaining**: 2 stories (8 points total)
 
 #### Story 103.1: Create Course Reviews Backend (5 pts)
+
 **Status**: DRAFTED
 **What to Build**:
+
 - `create()` mutation - Submit review (enrolled users only)
 - `list()` query - Get reviews for course
 - `hide()` mutation - Admin moderation
 - Average rating calculation
 
 #### Story 103.2: Update Course Ratings UI (3 pts)
+
 **Status**: BACKLOG
 **What to Build**:
+
 - Update courses.list() to include real ratings
 - Update course card display
 
@@ -76,8 +88,10 @@ This document guides BMAD agents on **what work remains** and **what to implemen
 ### Priority 3: Remaining Cleanup
 
 #### Story 109.3: Post-MVP Mock Replacement
+
 **Status**: DRAFTED
 **What to Build**:
+
 - Replace community page mock data (requires EPIC-106 backend)
 
 ---
@@ -87,6 +101,7 @@ This document guides BMAD agents on **what work remains** and **what to implemen
 **Recommended**: `story-102.2` - Quiz Submission & Grading Backend
 
 **Why**:
+
 - Blocks student quiz-taking functionality
 - Story is DRAFTED (ready for dev)
 - 6 points, completable in 1-2 days
@@ -97,6 +112,7 @@ This document guides BMAD agents on **what work remains** and **what to implemen
 ## Epic Summaries for Context
 
 Before implementing, read:
+
 - `epic-summaries/epic-102-quiz-system.md` - Full technical context
 - `docs/stories/story-102.2.md` - Story details
 - `docs/stories/story-context-102.2.xml` - Implementation context (if exists)
@@ -108,6 +124,7 @@ Before implementing, read:
 ### Goal
 
 Complete the core learning experience by enabling students to:
+
 1. Mark lessons as complete
 2. Track their progress through courses
 3. Take quizzes and receive instant feedback
@@ -116,6 +133,7 @@ Complete the core learning experience by enabling students to:
 ### Why This Sprint Matters
 
 Without progress tracking and quizzes, the platform has no way to:
+
 - Measure student engagement
 - Determine course completion
 - Issue certificates
@@ -381,6 +399,7 @@ A story is considered "done" when:
 ### Daily Standup (Virtual)
 
 **Format**: Update in sprint chat daily
+
 - What did I complete yesterday?
 - What am I working on today?
 - Any blockers?
@@ -388,6 +407,7 @@ A story is considered "done" when:
 ### Sprint Review (End of Week 4)
 
 **Goals**:
+
 - Demo progress tracking functionality
 - Demo quiz submission and grading
 - Review sprint metrics
@@ -396,6 +416,7 @@ A story is considered "done" when:
 ### Sprint Retrospective (End of Week 4)
 
 **Topics**:
+
 - What went well?
 - What could be improved?
 - Action items for Sprint 3
@@ -494,6 +515,7 @@ yarn lint
 ### Story Context XML
 
 Each story has a companion XML file with:
+
 - File paths to existing code
 - Implementation context
 - Edge cases to handle

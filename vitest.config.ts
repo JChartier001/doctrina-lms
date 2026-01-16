@@ -32,6 +32,7 @@ export default defineConfig({
 				'**/*.test.ts',
 				'app/layout.tsx',
 				'app/**/layout.tsx',
+				'components/*',
 			],
 
 			thresholds: {

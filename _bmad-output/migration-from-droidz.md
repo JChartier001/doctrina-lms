@@ -57,16 +57,16 @@ This document explains the transition from **Droidz** (previous AI workflow syst
 
 ## Key Differences
 
-| Aspect | Droidz | BMAD |
-|--------|--------|------|
-| **Approach** | Spec-driven (single spec → tasks) | Story-driven (epics → stories → tasks) |
-| **Agents** | Generic specialists (backend, frontend, test) | Named personas (Amelia, Winston, Bob, etc.) |
-| **Documentation Location** | `droidz/` folder | `_bmad-output/` + `docs/` folders |
-| **Commands** | `/shape-spec`, `/write-spec`, `/implement-tasks` | `/bmad:bmm:workflows:prd`, `/bmad:bmm:workflows:dev-story` |
-| **Standards** | `droidz/standards/` (comprehensive) | `.claude/standards/` (Next.js, React, Convex-specific) |
-| **Orchestration** | Orchestration YAML with specialist assignment | Sprint planning with story prioritization |
-| **Context Files** | `spec.md` + `tasks.md` | Story files + Story Context XML |
-| **Testing Strategy** | Standards-based, documented in `testing.md` | 100% backend coverage enforced, TDD red-green-refactor |
+| Aspect                     | Droidz                                           | BMAD                                                       |
+| -------------------------- | ------------------------------------------------ | ---------------------------------------------------------- |
+| **Approach**               | Spec-driven (single spec → tasks)                | Story-driven (epics → stories → tasks)                     |
+| **Agents**                 | Generic specialists (backend, frontend, test)    | Named personas (Amelia, Winston, Bob, etc.)                |
+| **Documentation Location** | `droidz/` folder                                 | `_bmad-output/` + `docs/` folders                          |
+| **Commands**               | `/shape-spec`, `/write-spec`, `/implement-tasks` | `/bmad:bmm:workflows:prd`, `/bmad:bmm:workflows:dev-story` |
+| **Standards**              | `droidz/standards/` (comprehensive)              | `.claude/standards/` (Next.js, React, Convex-specific)     |
+| **Orchestration**          | Orchestration YAML with specialist assignment    | Sprint planning with story prioritization                  |
+| **Context Files**          | `spec.md` + `tasks.md`                           | Story files + Story Context XML                            |
+| **Testing Strategy**       | Standards-based, documented in `testing.md`      | 100% backend coverage enforced, TDD red-green-refactor     |
 
 ---
 
@@ -263,24 +263,28 @@ docs/
 ### For Developers (If You're Implementing Code)
 
 1. **Check Sprint Status**:
+
    ```bash
    # Read current sprint
    cat _bmad-output/active-sprint.md
    ```
 
 2. **Read Story File**:
+
    ```bash
    # Example
    cat docs/stories/story-101.1.md
    ```
 
 3. **Read Story Context XML**:
+
    ```bash
    # Example
    cat docs/stories/story-context-101.1.xml
    ```
 
 4. **Check Project Context**:
+
    ```bash
    cat _bmad-output/project-context.md
    ```
@@ -299,16 +303,19 @@ docs/
 ### For Product/Planning Work
 
 1. **Update PRD**:
+
    ```bash
    /bmad:bmm:workflows:prd
    ```
 
 2. **Create/Update Epics**:
+
    ```bash
    /bmad:bmm:workflows:create-epics-and-stories
    ```
 
 3. **Check Sprint Progress**:
+
    ```bash
    /bmad:bmm:workflows:sprint-status
    ```
@@ -342,6 +349,7 @@ docs/
 ### Q: Where do I find coding standards now?
 
 **A**:
+
 1. **Primary**: `.claude/standards/` (Next.js, React, TypeScript, Convex-specific)
 2. **Reference**: `droidz/standards/` (broader patterns, still valid)
 3. **Context**: `_bmad-output/project-context.md` (project-specific patterns)
@@ -349,6 +357,7 @@ docs/
 ### Q: What happened to the orchestration.yml files?
 
 **A**: BMAD doesn't use orchestration files. Instead:
+
 - Stories define tasks/subtasks
 - Sprint planning determines order
 - Dev agent (Amelia) implements stories sequentially
@@ -361,6 +370,7 @@ docs/
 ### Q: Where are the specs?
 
 **A**:
+
 - **Epics**: High-level feature definitions in `docs/EPICS.md`
 - **Stories**: Implementation-ready specs in `docs/stories/story-XXX.md`
 - **Context**: Story Context XML files provide implementation guidance
@@ -368,6 +378,7 @@ docs/
 ### Q: How do I track progress?
 
 **A**:
+
 - **YAML**: `docs/sprint-status.yaml` (official tracking)
 - **Markdown**: `docs/bmm-workflow-status.md` (human-readable)
 - **Active Sprint**: `_bmad-output/active-sprint.md` (current sprint details)
@@ -384,7 +395,7 @@ docs/
 
 - [x] Preserve droidz/ folder for reference
 - [x] Preserve docs/ folder (PRD, Architecture, Epics, Stories)
-- [x] Create _bmad-output/ folder structure
+- [x] Create \_bmad-output/ folder structure
 - [x] Create project-context.md (consolidated patterns)
 - [x] Create active-sprint.md (current sprint details)
 - [x] Create migration-from-droidz.md (this file)
@@ -447,6 +458,7 @@ docs/
 
 **Issue**: Team familiar with droidz workflows needs to learn BMAD
 **Solution**:
+
 - This migration guide documents the transition
 - Party Mode allows asking BMAD agents for help
 - `_bmad-output/` docs provide quick reference
@@ -455,6 +467,7 @@ docs/
 
 **Issue**: Standards exist in both `droidz/` and `.claude/`
 **Solution**:
+
 - `.claude/standards/` are authoritative for tech-specific patterns
 - `droidz/standards/` remain as broader reference
 - `project-context.md` consolidates critical patterns
@@ -463,6 +476,7 @@ docs/
 
 **Issue**: Many BMAD workflows available, which to use?
 **Solution**:
+
 - Check `_bmad-output/active-sprint.md` for current work
 - Use `/bmad:bmm:workflows:sprint-status` to get guidance
 - Use Party Mode to ask agents for help
@@ -471,6 +485,7 @@ docs/
 
 **Issue**: Droidz used monolithic specs; BMAD uses granular stories
 **Solution**:
+
 - Epics provide high-level context (like old specs)
 - Stories provide implementation-ready work (like old tasks)
 - Story Context XML provides rich context (like old spec details)

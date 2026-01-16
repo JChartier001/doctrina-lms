@@ -18,6 +18,7 @@ The learning interface (`/courses/[id]/learn`) has "Mark as Complete" buttons bu
 ### Solution Summary
 
 Implement a complete lesson progress tracking system that:
+
 1. Tracks lesson completions per user
 2. Calculates course progress percentages
 3. Triggers certificate generation at 100% completion
@@ -33,16 +34,17 @@ Implement a complete lesson progress tracking system that:
 
 ```typescript
 lessonProgress: defineTable({
-  userId: v.string(),              // Clerk user ID
-  lessonId: v.id('lessons'),       // Foreign key to lessons
-  completedAt: v.number(),         // Unix timestamp (ms)
+	userId: v.string(), // Clerk user ID
+	lessonId: v.id('lessons'), // Foreign key to lessons
+	completedAt: v.number(), // Unix timestamp (ms)
 })
-  .index('by_user_lesson', ['userId', 'lessonId'])  // Uniqueness + lookup
-  .index('by_user', ['userId'])                      // Get all user progress
-  .index('by_lesson', ['lessonId'])                  // Get lesson completion stats
+	.index('by_user_lesson', ['userId', 'lessonId']) // Uniqueness + lookup
+	.index('by_user', ['userId']) // Get all user progress
+	.index('by_lesson', ['lessonId']); // Get lesson completion stats
 ```
 
 **Design Decisions**:
+
 - **Simple schema**: Only essential fields (userId, lessonId, completedAt)
 - **No "started" tracking**: Only track completion, not in-progress state
 - **Immutable**: Once completed, record persists (no "uncomplete" in MVP)
@@ -55,6 +57,7 @@ lessonProgress: defineTable({
 **Purpose**: Mark a lesson as complete for the current user
 
 **Flow**:
+
 ```
 1. Verify user authentication
 2. Get lesson details (moduleId, courseId)
@@ -66,6 +69,7 @@ lessonProgress: defineTable({
 ```
 
 **Authorization**:
+
 - Must be authenticated
 - Must be enrolled in the course
 
@@ -76,6 +80,7 @@ lessonProgress: defineTable({
 **Purpose**: Update enrollment progress percentage and trigger certificate generation
 
 **Flow**:
+
 ```
 1. Get enrollment record
 2. Query all courseModules for this course
@@ -91,6 +96,7 @@ lessonProgress: defineTable({
 ```
 
 **Performance Considerations**:
+
 - Multiple queries (modules → lessons → progress records)
 - Potentially expensive for courses with many lessons
 - Called on every lesson completion
@@ -101,6 +107,7 @@ lessonProgress: defineTable({
 **Purpose**: Get user's progress for a course (for display)
 
 **Returns**:
+
 ```typescript
 {
   enrollmentId: Id<'enrollments'>,
@@ -112,6 +119,7 @@ lessonProgress: defineTable({
 ```
 
 **Use Cases**:
+
 - Display progress bar on learning page
 - Show which lessons are complete (checkmarks)
 - Dashboard progress display
@@ -121,6 +129,7 @@ lessonProgress: defineTable({
 **Purpose**: Find the next lesson the user hasn't completed
 
 **Flow**:
+
 ```
 1. Get all modules for course (sorted by order)
 2. For each module:
@@ -132,6 +141,7 @@ lessonProgress: defineTable({
 ```
 
 **Use Cases**:
+
 - "Continue Learning" button
 - Auto-navigate to next incomplete lesson
 
@@ -144,14 +154,16 @@ lessonProgress: defineTable({
 **File**: `convex/enrollments.ts`
 
 **Changes Needed**:
+
 - Call `recalculateProgress()` from `markComplete()`
 - Update `progressPercent` field in enrollments table
 - Set `completedAt` timestamp at 100%
 
 **Pattern**:
+
 ```typescript
 await ctx.runMutation(api.lessonProgress.recalculateProgress, {
-  enrollmentId: enrollment._id,
+	enrollmentId: enrollment._id,
 });
 ```
 
@@ -160,28 +172,32 @@ await ctx.runMutation(api.lessonProgress.recalculateProgress, {
 **File**: `convex/certificates.ts`
 
 **Changes Needed** (Story 101.2):
+
 - Certificate generation currently manual
 - Should be triggered automatically at 100% completion
 - Use `ctx.scheduler.runAfter()` for async generation
 
 **Pattern**:
+
 ```typescript
 if (progressPercent === 100) {
-  await ctx.scheduler.runAfter(0, api.certificates.generate, {
-    userId: enrollment.userId,
-    courseId: enrollment.courseId,
-  });
+	await ctx.scheduler.runAfter(0, api.certificates.generate, {
+		userId: enrollment.userId,
+		courseId: enrollment.courseId,
+	});
 }
 ```
 
 ### 3. Frontend Integration
 
 **Files**:
+
 - `app/courses/[id]/learn/page.tsx` - Learning interface
 - `app/dashboard/page.tsx` - Progress display
 - `app/dashboard/progress/page.tsx` - Detailed progress
 
 **Pattern**:
+
 ```typescript
 'use client';
 import { useMutation, useQuery } from 'convex/react';
@@ -215,6 +231,7 @@ export function LessonView({ lessonId, courseId }) {
 **Owner**: Dev agent (Amelia)
 
 **Tasks**: ✅ All Complete
+
 1. ✅ Create `convex/lessonProgress.ts`
 2. ✅ Implement `markComplete()` mutation
 3. ✅ Implement `recalculateProgress()` mutation
@@ -224,6 +241,7 @@ export function LessonView({ lessonId, courseId }) {
 7. ✅ Update schema.ts if needed
 
 **Acceptance Criteria**: ✅ All Met
+
 - ✅ All functions implemented
 - ✅ 100% test coverage
 - ✅ Real-time progress updates
@@ -237,6 +255,7 @@ export function LessonView({ lessonId, courseId }) {
 **Depends On**: Story 101.1 (complete)
 
 **Tasks**: ✅ All Complete
+
 1. ✅ Modify `convex/certificates.ts`
 2. ✅ Add automatic certificate generation trigger
 3. ✅ Remove manual certificate creation from UI
@@ -244,6 +263,7 @@ export function LessonView({ lessonId, courseId }) {
 5. ✅ Update tests
 
 **Acceptance Criteria**: ✅ All Met
+
 - ✅ Certificate generated automatically at 100%
 - ✅ No manual certificate creation needed
 - ✅ 100% test coverage
@@ -310,6 +330,7 @@ export function LessonView({ lessonId, courseId }) {
 **Concern**: `recalculateProgress()` makes multiple queries
 
 **Current Approach**:
+
 ```typescript
 // Get modules
 const modules = await ctx.db.query('courseModules')...
@@ -320,10 +341,12 @@ for (const module of modules) {
 ```
 
 **Performance**: O(M + L) where M = modules, L = lessons
+
 - Acceptable for MVP (courses have ~10-50 lessons)
 - Consider caching for courses with 100+ lessons
 
 **Future Optimization**:
+
 - Denormalize `lessonCount` on course/module
 - Cache progress calculations (invalidate on lesson complete)
 - Background job for batch recalculation
@@ -331,11 +354,13 @@ for (const module of modules) {
 ### Index Usage
 
 **by_user_lesson Index**:
+
 - Used for uniqueness check
 - Used for "already complete" queries
 - Efficient compound index
 
 **by_user Index**:
+
 - Used for getUserProgress()
 - Efficient for "get all user completions"
 

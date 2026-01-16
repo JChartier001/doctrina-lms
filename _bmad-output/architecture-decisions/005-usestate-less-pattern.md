@@ -62,11 +62,13 @@ We adopt **Pattern B: useState-Less** for all server data in Doctrina LMS.
 #### 1. Real-Time Updates Automatic
 
 **With useState**:
+
 - Data is stale immediately after fetch
 - Must manually poll or setup WebSocket
 - Complexity increases
 
 **With Convex Hooks**:
+
 - Data updates automatically when changed
 - No polling, no WebSocket setup
 - Real-time by default
@@ -76,12 +78,14 @@ We adopt **Pattern B: useState-Less** for all server data in Doctrina LMS.
 #### 2. Less Code, Fewer Bugs
 
 **With useState**:
+
 - Manage loading state manually
 - Manage error state manually
 - Manage stale data manually
 - Risk of memory leaks (unmounted component fetches)
 
 **With Convex Hooks**:
+
 - Loading state handled by `undefined`
 - Errors thrown automatically
 - Stale data impossible
@@ -92,11 +96,13 @@ We adopt **Pattern B: useState-Less** for all server data in Doctrina LMS.
 #### 3. Type Safety
 
 **With useState**:
+
 ```typescript
 const [courses, setCourses] = useState<Course[]>([]); // Must type manually
 ```
 
 **With Convex Hooks**:
+
 ```typescript
 const courses = useQuery(api.courses.list); // Type inferred from Convex schema
 ```
@@ -106,10 +112,12 @@ const courses = useQuery(api.courses.list); // Type inferred from Convex schema
 #### 4. Optimistic Updates
 
 **With useState**:
+
 - Must manually implement optimistic UI
 - Complex rollback logic on error
 
 **With Convex**:
+
 - Optimistic updates built-in via `useOptimistic` (coming in Convex)
 - Automatic rollback on error
 
@@ -195,6 +203,7 @@ export function CourseCard({ courseId }) {
 ### Exceptions: When useState is OK
 
 ✅ **Use useState for**:
+
 - **UI state** (modals open/closed, form inputs, local filters)
 - **Non-Convex data** (third-party APIs, localStorage)
 - **Derived state** (computed from props/Convex data)
@@ -270,11 +279,13 @@ return (
 ### Alternative 1: React Query + REST API
 
 **Pros**:
+
 - Well-known library
 - Works with any backend
 - Good caching
 
 **Cons**:
+
 - More setup than Convex hooks
 - No real-time (must add WebSocket)
 - More code than Convex
@@ -284,11 +295,13 @@ return (
 ### Alternative 2: SWR + REST API
 
 **Pros**:
+
 - Simple API
 - Good caching
 - Works with any backend
 
 **Cons**:
+
 - No real-time
 - Must manage loading/error states
 - More code than Convex
@@ -298,10 +311,12 @@ return (
 ### Alternative 3: Redux/Zustand + Convex
 
 **Pros**:
+
 - Centralized state management
 - Can combine Convex data with other state
 
 **Cons**:
+
 - Overengineering (Convex already manages server state)
 - More boilerplate
 - Duplicates Convex's caching
@@ -317,20 +332,20 @@ return (
 **Scenario**: Switch from Convex to PostgreSQL + REST API
 
 **Migration Path**:
+
 1. Replace `useQuery` with React Query or SWR
 2. Replace `useMutation` with async functions
 3. Add loading/error state management
 4. Add WebSocket or polling for real-time (if needed)
 
 **Code Change**:
+
 ```typescript
 // Before (Convex)
 const courses = useQuery(api.courses.list);
 
 // After (React Query + REST)
-const { data: courses, isLoading } = useQuery('courses', () =>
-  fetch('/api/courses').then(res => res.json())
-);
+const { data: courses, isLoading } = useQuery('courses', () => fetch('/api/courses').then(res => res.json()));
 ```
 
 **Estimated Effort**: 1-2 weeks to replace all Convex hooks
